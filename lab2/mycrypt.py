@@ -4,8 +4,8 @@ def encode(s):
     MAXSIZE = 200000
     if not isinstance(s,str):
         raise TypeError
-    origlen = len(s)
-    crypted = ""
+    #origlen = len(s)
+    #crypted = ""
     digitmapping = dict(zip('1234567890!"#€%&/()=','!"#€%&/()=1234567890'))
     if len(s) > MAXSIZE:
         raise ValueError
@@ -27,7 +27,8 @@ def encode(s):
     return full_encoded[:len(s)]
 
 def decode(s):
-    origlen = len(s)
+    #origlen = len(s)
+    MAXSIZE = 5
     decoded = ""
     digitmapping = dict(zip('1234567890!"#€%&/()=','!"#€%&/()=1234567890'))
     if len(s) > 1000:

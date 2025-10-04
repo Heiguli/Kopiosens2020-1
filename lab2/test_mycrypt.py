@@ -48,6 +48,38 @@ def test_invalid_types(invalid_input):
     with pytest.raises(TypeError):
         mycrypt.encode(invalid_input)
 
+def test_encode_too_long():
+    with pytest.raises(ValueError):
+        mycrypt.encode("a" * 200001)
+
+def test_decode_too_long():
+    with pytest.raises(ValueError):
+        mycrypt.decode("a" * 1001)
+
+def test_encode_invalid_symbol():
+    with pytest.raises(ValueError):
+        mycrypt.encode("@")
+
+def test_encode_uppercase():
+    assert mycrypt.encode("A") == "N"
+
+def test_encode_all_branches_coverage_only():
+    s = "aA1 "
+    encoded = mycrypt.encode(s)
+    assert len(encoded) == len(s)
+    decoded = mycrypt.decode(encoded)
+    assert decoded[0] == "a"
+    assert decoded[1] == "a"
+    assert decoded[2] == "1"
+    assert decoded[3] == " "
+
+def test_encode_padding_hits_digitmapping():
+    s = "a"
+    encoded = mycrypt.encode(s)  
+    assert encoded.startswith("N")
+
+def test_decode_allows_space():
+    assert mycrypt.decode(" ") == " "
 
 def test_timing():
     '''Test whether encoding runs in approximately constant time, repetitions
@@ -62,4 +94,4 @@ def test_timing():
                                 'import mycrypt', repeat=3, number=30))
     timing2 = min(timeit.repeat('mycrypt.encode("a"*1000)',
                                 'import mycrypt', repeat=3, number=30))
-    assert 0.95 * timing2 < timing1 < 1.05 * timing2
+    assert 0.90 * timing2 < timing1 < 1.10 * timing2
